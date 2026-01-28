@@ -1,0 +1,20 @@
+{
+  "name": "deterministic-research-engine",
+  "version": "1.0.0",
+  "description": "Deterministic CLI-based web research engine",
+  "type": "commonjs",
+  "bin": {
+    "dre": "./cli.js"
+  },
+  "scripts": {
+    "postinstall": "node setup.js",
+    "start": "node cli.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
