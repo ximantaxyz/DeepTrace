@@ -5,6 +5,11 @@ A deterministic, CLI-based web research engine designed to perform deep, structu
 This project focuses on reliability, reproducibility, and control — not hallucinations or shallow summaries.
 
 ---
+![Version](https://img.shields.io/badge/version-v1.0.0-blue)
+![Node.js](https://img.shields.io/badge/node-%3E%3D18-green)
+![Status](https://img.shields.io/badge/status-stable-success)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+---
 
 ## Overview
 
