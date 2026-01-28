@@ -59,7 +59,6 @@ It is built to **gather truth first**, then analyze later.
 
 Check Node.js version:
 node -v
-Copy code
 
 ---
 
@@ -67,27 +66,21 @@ Copy code
 
 Clone the repository:
 git clone https://github.com/ximantaxyz/deeptrace.git cd DeepTrace
-Copy code
 
 Install dependencies (if package.json exists):
 npm install
-Copy code
 
 Make the CLI executable (Linux / Termux):
 chmod +x cli.js
-Copy code
-
 ---
 
 ## Usage
 
 Run the research engine:
 node cli.js
-Copy code
 
 or
 ./cli.js
-Copy code
 
 You will be prompted for:
 1. Main research topic (required)
