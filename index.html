@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepTrace - Deterministic Web Research Engine</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f14;
+            --bg-secondary: #141a24;
+            --bg-card: #1a2230;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #22d3ee;
+            --accent-hover: #06b6d4;
+            --border: #2d3748;
+            --gradient: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(11, 15, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 6rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(34, 211, 238, 0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        /* Section Common */
+        section {
+            padding: 6rem 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            color: var(--accent);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        /* Problem Section */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .problem-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+        
+        .problem-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        /* Solution Section */
+        .solution {
+            background: var(--bg-secondary);
+            position: relative;
+        }
+        
+        .solution-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .feature-icon {
+            color: var(--accent);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        /* Audience Section */
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .audience-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .audience-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .audience-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        /* How It Works */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            max-width: 800px;
+            margin: 3rem auto 0;
+            position: relative;
+        }
+        
+        .steps::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+        
+        .step {
+            display: flex;
+            gap: 2rem;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        
+        .step-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 0;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .steps::before {
+                left: 20px;
+            }
+            
+            .step {
+                gap: 1rem;
+            }
+            
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .mobile-nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav-links a:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">DeepTrace</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="faqs.html">FAQs</a></li>
+                <li><a href="agreement.html">Agreement</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </nav>
+    </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documentation.html">Documentation</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="agreement.html">Agreement</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+    </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="fade-in">Deterministic Web Research Engine</h1>
+            <p class="hero-subtitle fade-in">DeepTrace systematically explores web content, builds structured question trees, and delivers verified research outputs—eliminating AI uncertainty and shallow browsing limitations.</p>
+            <div class="cta-buttons fade-in">
+                <a href="#how-it-works" class="btn btn-primary">Explore How It Works</a>
+                <a href="https://github.com/ximantaxyz/deeptrace" target="_blank" class="btn btn-secondary">View GitHub Repository</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="container">
+        <div class="section-subtitle">The Problem</div>
+        <h2 class="section-title">Why Traditional Research Tools Fail</h2>
+        <div class="problem-grid">
+            <div class="problem-card fade-in">
+                <h3>Shallow Browsing</h3>
+                <p>Most tools skim surface-level content without deep inspection, missing critical context and nuance essential for accurate research.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <h3>URL Refusal & Early Stopping</h3>
+                <p>Traditional systems often refuse to visit certain URLs or stop prematurely, leaving gaps in research coverage and verification.</p>
+            </div>
+            <div class="problem-card fade-in">
+                <h3>Non-Deterministic Output</h3>
+                <p>AI-based tools produce inconsistent results across runs, making replication and verification of research findings impossible.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution">
+        <div class="container">
+            <div class="section-subtitle">Our Solution</div>
+            <h2 class="section-title">Structured, Deterministic Research</h2>
+            <div class="solution-content fade-in">
+                <p>DeepTrace is a CLI-based research engine that approaches web exploration methodically. It generates structured question trees, inspects multiple web pages deterministically, stores verified data as clean JSON, and produces synthesized research outputs.</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">→</div>
+                        <div>
+                            <h3>CLI-First Architecture</h3>
+                            <p>Built for power users who need precise control over research parameters and workflows.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">→</div>
+                        <div>
+                            <h3>Structured Question Generation</h3>
+                            <p>Automatically decomposes research topics into logical question trees for systematic exploration.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">→</div>
+                        <div>
+                            <h3>Deterministic Page Inspection</h3>
+                            <p>Visits and analyzes web pages consistently, ensuring reproducible research outcomes.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">→</div>
+                        <div>
+                            <h3>Clean Data Storage</h3>
+                            <p>All verified information is stored as structured JSON, ready for analysis or integration.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Audience Section -->
+    <section id="audience" class="container">
+        <div class="section-subtitle">Who It's For</div>
+        <h2 class="section-title">Built for Systematic Researchers</h2>
+        <div class="audience-grid">
+            <div class="audience-card fade-in">
+                <div class="audience-icon">🎓</div>
+                <h3>Students & Researchers</h3>
+                <p>Academic professionals needing verifiable, reproducible web research for papers and studies.</p>
+            </div>
+            <div class="audience-card fade-in">
+                <div class="audience-icon">🚀</div>
+                <h3>Founders & Analysts</h3>
+                <p>Business professionals requiring comprehensive market research and competitive analysis.</p>
+            </div>
+            <div class="audience-card fade-in">
+                <div class="audience-icon">🔍</div>
+                <h3>Independent Investigators</h3>
+                <p>Individuals conducting deep-dive investigations who need systematic evidence collection.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="container">
+        <div class="section-subtitle">Process</div>
+        <h2 class="section-title">How DeepTrace Works</h2>
+        <div class="steps">
+            <div class="step fade-in">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Research Topic Input</h3>
+                    <p>Users provide a research topic through the command-line interface, specifying scope and parameters.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Question Tree Generation</h3>
+                    <p>The engine decomposes the topic into structured questions, creating a logical exploration path.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Deterministic Page Inspection</h3>
+                    <p>Systematically visits relevant web pages, extracting and verifying information according to the question tree.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Structured Data Storage</h3>
+                    <p>All verified findings are stored as clean JSON with source attribution and confidence scoring.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Synthesized Output Generation</h3>
+                    <p>Produces comprehensive research reports combining all verified data into actionable insights.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="fade-in">Start Researching Systematically</h2>
+            <p class="fade-in">Explore the documentation to understand DeepTrace's architecture or check the GitHub repository for implementation details.</p>
+            <div class="cta-buttons fade-in">
+                <a href="#" class="btn btn-primary">Read Documentation</a>
+                <a href="https://github.com/ximantaxyz/deeptrace" target="_blank" class="btn btn-secondary">Open GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">DeepTrace</div>
+                    <p>Deterministic Web Research Engine for systematic, verifiable exploration.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a>
+                        <a href="https://instagram.com/ximanta.xyz_" target="_blank">Instagram</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Resources</h3>
+                    <div class="footer-links">
+                        <a href="#">Documentation</a>
+                        <a href="#">Examples</a>
+                        <a href="#">API Reference</a>
+                        <a href="#">Changelog</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Contact</h3>
+                    <div class="footer-links">
+                        <a href="mailto:ximanta.official@gmail.com">ximanta.official@gmail.com</a>
+                        <a href="#">Founder: Himanta Bhuyan</a>
+                        <a href="#">Report an Issue</a>
+                        <a href="#">Feature Request</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© <span id="currentYear"></span> DeepTrace. All rights reserved.</p>
+                <p>Founded by Himanta Bhuyan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileMenuBtn.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
+        
+        // Update copyright year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    mobileNav.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements with fade-in class
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Add scroll effect to header
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll <= 0) {
+                header.style.boxShadow = 'none';
+            } else {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>

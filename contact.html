@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — DeepTrace</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f14;
+            --bg-secondary: #141a24;
+            --bg-card: #1a2230;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #22d3ee;
+            --accent-hover: #06b6d4;
+            --border: #2d3748;
+            --gradient: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(11, 15, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Page Intro */
+        .page-intro {
+            padding: 10rem 0 4rem;
+            position: relative;
+        }
+        
+        .page-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            line-height: 1.7;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            padding: 3rem 0 6rem;
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .contact-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+        
+        .contact-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .contact-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* Form Styles */
+        .contact-form {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .form-label .required {
+            color: var(--error);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        /* Form Status */
+        .form-status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        
+        .form-status.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+        
+        .form-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            display: block;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(34, 211, 238, 0.2);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .submit-btn.loading .loading-spinner {
+            display: block;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .contact-form {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .contact-card {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .mobile-nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">DeepTrace</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="faqs.html">FAQs</a></li>
+                <li><a href="agreement.html">Agreement</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </nav>
+    </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documentation.html">Documentation</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="agreement.html">Agreement</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+    </ul>
+</div>
+    <!-- Page Intro -->
+    <section class="page-intro">
+        <div class="container">
+            <h1 class="page-title fade-in">Contact DeepTrace</h1>
+            <p class="page-subtitle fade-in delay-1">
+                For technical support, research inquiries, or collaboration opportunities.
+                Please provide detailed information to help us respond appropriately.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-container">
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <div class="contact-card fade-in delay-2">
+                        <h3>Technical Support</h3>
+                        <p>For issues with the DeepTrace engine, installation problems, or technical questions about the deterministic research process.</p>
+                        <p>Please include relevant system information and error details when possible.</p>
+                    </div>
+                    
+                    <div class="contact-card fade-in delay-3">
+                        <h3>Research Inquiries</h3>
+                        <p>For questions about research methodologies, deterministic approaches, or academic collaboration.</p>
+                        <p>Include information about your research domain and specific use cases.</p>
+                    </div>
+                    
+                    <div class="contact-card fade-in">
+                        <h3>Response Time</h3>
+                        <p>We aim to respond to all inquiries within 48 hours. For urgent matters, please indicate the urgency in your message subject.</p>
+                        <p>All communication is handled with professional confidentiality.</p>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form fade-in delay-2">
+                    <div id="formStatus" class="form-status"></div>
+                    
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Name <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                name="name" 
+                                placeholder="Your full name" 
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Email <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="email" 
+                                class="form-input" 
+                                name="email" 
+                                placeholder="you@example.com" 
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Phone (Optional)
+                            </label>
+                            <input 
+                                type="tel" 
+                                class="form-input" 
+                                name="phone" 
+                                placeholder="+1 (123) 456-7890"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Subject (Optional)
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-input" 
+                                name="subject" 
+                                placeholder="Brief description of your inquiry"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                Message <span class="required">*</span>
+                            </label>
+                            <textarea 
+                                class="form-input" 
+                                name="message" 
+                                placeholder="Please provide detailed information about your inquiry..." 
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span>Send Message</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">DeepTrace</div>
+                    <p>Deterministic Web Research Engine for systematic, verifiable exploration.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a>
+                        <a href="https://instagram.com/ximanta.xyz_" target="_blank">Instagram</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Resources</h3>
+                    <div class="footer-links">
+                        <a href="documentation.html">Documentation</a>
+                        <a href="faqs.html">FAQs</a>
+                        <a href="#">API Reference</a>
+                        <a href="#">Changelog</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Contact</h3>
+                    <div class="footer-links">
+                        <a href="mailto:ximanta.official@gmail.com">ximanta.official@gmail.com</a>
+                        <a href="#">Founder: Himanta Bhuyan</a>
+                        <a href="#">Report an Issue</a>
+                        <a href="#">Feature Request</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© <span id="currentYear"></span> DeepTrace. All rights reserved.</p>
+                <p>Founded by Himanta Bhuyan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileMenuBtn.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
+        
+        // Update copyright year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formStatus = document.getElementById('formStatus');
+        
+        // Escape HTML to prevent injection
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Format message for Telegram
+        function formatTelegramMessage(formData) {
+            return `📨 *New DeepTrace Contact Form Submission*
+
+*Project:* DeepTrace
+*Name:* ${escapeHtml(formData.name)}
+*Email:* ${escapeHtml(formData.email)}
+*Phone:* ${formData.phone ? escapeHtml(formData.phone) : 'Not provided'}
+*Subject:* ${formData.subject ? escapeHtml(formData.subject) : 'No subject'}
+
+*Message:*
+${escapeHtml(formData.message)}
+
+---
+Sent via DeepTrace Contact Form`;
+        }
+        
+        // Send to Telegram
+        async function sendToTelegram(message) {
+            const TELEGRAM_BOT_TOKEN = 'TELEGRAM_BOT_TOKEN'; // Replace with actual token
+            const TELEGRAM_CHAT_ID = 'TELEGRAM_CHAT_ID'; // Replace with actual chat ID
+            
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+            
+            return response.ok;
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            formStatus.textContent = message;
+            formStatus.className = `form-status ${type}`;
+            formStatus.style.display = 'block';
+            
+            // Scroll to status message
+            formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Form submission handler
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Basic validation
+            const formData = {
+                name: contactForm.name.value.trim(),
+                email: contactForm.email.value.trim(),
+                phone: contactForm.phone.value.trim(),
+                subject: contactForm.subject.value.trim(),
+                message: contactForm.message.value.trim()
+            };
+            
+            if (!formData.name || !formData.email || !formData.message) {
+                showStatus('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                showStatus('Please enter a valid email address.', 'error');
+                return;
+            }
+            
+            // Set loading state
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            try {
+                // Format and send message
+                const telegramMessage = formatTelegramMessage(formData);
+                const success = await sendToTelegram(telegramMessage);
+                
+                if (success) {
+                    showStatus('Your message has been sent successfully. We will respond as soon as possible.', 'success');
+                    contactForm.reset();
+                } else {
+                    showStatus('Failed to send message. Please try again or contact us via email.', 'error');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showStatus('An error occurred. Please try again or contact us via email.', 'error');
+            } finally {
+                // Reset loading state
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.pageYOffset > 0) {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+        
+        // Initialize fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation — DeepTrace</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f14;
+            --bg-secondary: #141a24;
+            --bg-card: #1a2230;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #22d3ee;
+            --accent-hover: #06b6d4;
+            --border: #2d3748;
+            --gradient: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+            --code-bg: #0f172a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(11, 15, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Page Intro */
+        .page-intro {
+            padding: 10rem 0 4rem;
+            position: relative;
+        }
+        
+        .page-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            line-height: 1.7;
+        }
+        
+        /* Documentation Content */
+        .doc-content {
+            padding: 3rem 0 6rem;
+        }
+        
+        .doc-section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 120px;
+        }
+        
+        .doc-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .section-content {
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        
+        .section-content p {
+            margin-bottom: 1.2rem;
+            color: var(--text-secondary);
+        }
+        
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        /* Code Blocks */
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .code-block code {
+            color: #cbd5e1;
+        }
+        
+        .code-comment {
+            color: #64748b;
+        }
+        
+        .code-string {
+            color: #10b981;
+        }
+        
+        .code-keyword {
+            color: #8b5cf6;
+        }
+        
+        .code-function {
+            color: #3b82f6;
+        }
+        
+        /* Lists */
+        .section-content ul, .section-content ol {
+            margin: 1.2rem 0;
+            padding-left: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .section-content li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .section-content li:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Table of Contents */
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0 3rem;
+        }
+        
+        .toc-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: var(--text-primary);
+        }
+        
+        .toc-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.8rem;
+        }
+        
+        .toc-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .toc-link:hover {
+            color: var(--accent);
+        }
+        
+        .toc-link::before {
+            content: "→";
+            margin-right: 0.5rem;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .toc-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .doc-section {
+                margin-bottom: 4rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .code-block {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .mobile-nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .section-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .section-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">DeepTrace</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="faqs.html">FAQs</a></li>
+                <li><a href="agreement.html">Agreement</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </nav>
+    </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documentation.html">Documentation</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="agreement.html">Agreement</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+    </ul>
+</div>
+
+    <!-- Page Intro -->
+    <section class="page-intro">
+        <div class="container">
+            <h1 class="page-title fade-in">Documentation — DeepTrace</h1>
+            <p class="page-subtitle fade-in">
+                Official technical documentation for DeepTrace v1.0.0 — Deterministic Research Engine.
+                This document covers architecture, usage, and technical specifications.
+            </p>
+            
+            <div class="toc fade-in">
+                <div class="toc-title">Table of Contents</div>
+                <div class="toc-links">
+                    <a href="#what-is" class="toc-link">What is DeepTrace?</a>
+                    <a href="#what-is-not" class="toc-link">What DeepTrace is NOT</a>
+                    <a href="#how-it-works" class="toc-link">How DeepTrace v1 Works</a>
+                    <a href="#installation" class="toc-link">Installation</a>
+                    <a href="#running" class="toc-link">Running the Engine</a>
+                    <a href="#outputs" class="toc-link">Output Files</a>
+                    <a href="#structure" class="toc-link">Folder Structure</a>
+                    <a href="#limits" class="toc-link">Limits of v1</a>
+                    <a href="#future" class="toc-link">Future Direction</a>
+                    <a href="#safety" class="toc-link">Safety & Ethics</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Content -->
+    <main class="doc-content">
+        <div class="container">
+            <!-- What is DeepTrace? -->
+            <section id="what-is" class="doc-section section-fade">
+                <h2 class="section-title">What is DeepTrace?</h2>
+                <div class="section-content">
+                    <p>DeepTrace is a deterministic web research engine designed for systematic, reproducible exploration of web content. It operates without AI, LLMs, or machine learning components in version 1.</p>
+                    <p>The engine follows rule-based procedures to generate structured question trees, inspect web pages methodically, and produce verifiable research outputs. Every operation is traceable and reproducible with identical inputs yielding identical outputs.</p>
+                    <p>Version 1 establishes a foundation of deterministic research, prioritizing transparency and control over convenience. The system is designed for researchers who require consistent, verifiable results rather than probabilistic or conversational interaction.</p>
+                </div>
+            </section>
+
+            <!-- What DeepTrace is NOT -->
+            <section id="what-is-not" class="doc-section section-fade">
+                <h2 class="section-title">What DeepTrace is NOT</h2>
+                <div class="section-content">
+                    <p><strong>Not a chatbot:</strong> DeepTrace does not engage in conversational interaction. It follows deterministic research workflows with structured inputs and outputs.</p>
+                    <p><strong>Not an AI assistant:</strong> The engine contains no neural networks, language models, or machine learning algorithms in version 1. All operations are rule-based.</p>
+                    <p><strong>Not a search engine:</strong> While it utilizes web content, DeepTrace performs active research by visiting and analyzing pages rather than indexing and ranking links.</p>
+                    <p><strong>Not a scraper for illegal content:</strong> The tool is designed for legitimate research purposes. Users must comply with all applicable laws and website terms of service.</p>
+                </div>
+            </section>
+
+            <!-- How DeepTrace v1 Works -->
+            <section id="how-it-works" class="doc-section section-fade">
+                <h2 class="section-title">How DeepTrace v1 Works</h2>
+                <div class="section-content">
+                    <p>The research process follows a deterministic sequence:</p>
+                    <ol>
+                        <li><strong>CLI-based workflow:</strong> All interaction occurs through a command-line interface.</li>
+                        <li><strong>Deterministic question generation:</strong> Research topics are decomposed into structured question trees using rule-based algorithms.</li>
+                        <li><strong>Structured page inspection:</strong> Web pages are visited and analyzed according to predefined inspection patterns.</li>
+                        <li><strong>Controlled research depth:</strong> Exploration depth is configurable and follows predictable branching patterns.</li>
+                        <li><strong>JSON-based outputs:</strong> All findings are stored as structured JSON data with source attribution.</li>
+                    </ol>
+                    <p>The engine maintains a research log documenting every operation, allowing complete traceability from input to output.</p>
+                </div>
+            </section>
+
+            <!-- Installation -->
+            <section id="installation" class="doc-section section-fade">
+                <h2 class="section-title">Installation</h2>
+                <div class="section-content">
+                    <p>DeepTrace requires Node.js and runs entirely locally without cloud services:</p>
+                    <div class="code-block">
+                        <pre><code><span class="code-comment"># Clone the repository</span>
+git clone https://github.com/ximantaxyz/deeptrace.git
+cd deeptrace
+
+<span class="code-comment"># Install dependencies</span>
+npm install
+
+<span class="code-comment"># Verify installation</span>
+node cli.js --version</code></pre>
+                    </div>
+                    <p><strong>System requirements:</strong> Node.js 16+ with npm. No additional services or APIs are required for operation.</p>
+                    <p><strong>Note:</strong> The engine operates within your local environment. All data remains on your machine unless explicitly shared.</p>
+                </div>
+            </section>
+
+            <!-- Running the Engine -->
+            <section id="running" class="doc-section section-fade">
+                <h2 class="section-title">Running the Engine</h2>
+                <div class="section-content">
+                    <p>Start the research engine from the command line:</p>
+                    <div class="code-block">
+                        <pre><code>node cli.js</code></pre>
+                    </div>
+                    <p>The engine will prompt for three inputs:</p>
+                    <ol>
+                        <li><strong>Research topic:</strong> The primary subject for investigation.</li>
+                        <li><strong>Optional instruction:</strong> Specific constraints or focus areas for the research.</li>
+                        <li><strong>Optional URLs:</strong> Starting points for web exploration (if omitted, the engine will begin with search results).</li>
+                    </ol>
+                    <p>Once initiated, the engine proceeds step-by-step:</p>
+                    <ol>
+                        <li>Generates question tree based on the topic</li>
+                        <li>Systematically visits relevant web pages</li>
+                        <li>Extracts and verifies information</li>
+                        <li>Stores findings in structured format</li>
+                        <li>Produces synthesis output</li>
+                    </ol>
+                    <p>The process is fully logged and can be interrupted or resumed at any point.</p>
+                </div>
+            </section>
+
+            <!-- Output Files -->
+            <section id="outputs" class="doc-section section-fade">
+                <h2 class="section-title">Output Files</h2>
+                <div class="section-content">
+                    <p>DeepTrace generates several output files in the <code>outputs/</code> directory:</p>
+                    <ul>
+                        <li><strong>research_data.json:</strong> Structured data containing all extracted information with source URLs and timestamps.</li>
+                        <li><strong>research_log.txt:</strong> Complete log of all operations including page visits, extractions, and decisions.</li>
+                        <li><strong>synthesis_output.json:</strong> Consolidated research findings organized by the question tree structure.</li>
+                        <li><strong>question_tree.json:</strong> The generated question structure that guided the research process.</li>
+                    </ul>
+                    <p>All files use consistent naming conventions with timestamps to allow multiple research sessions:</p>
+                    <div class="code-block">
+                        <pre><code>outputs/
+├── research_20240128_152430_data.json
+├── research_20240128_152430_log.txt
+├── research_20240128_152430_synthesis.json
+└── research_20240128_152430_questions.json</code></pre>
+                    </div>
+                    <p>Outputs are designed for further analysis, integration with other tools, or manual examination.</p>
+                </div>
+            </section>
+
+            <!-- Folder Structure -->
+            <section id="structure" class="doc-section section-fade">
+                <h2 class="section-title">Folder Structure</h2>
+                <div class="section-content">
+                    <p>The project follows a modular architecture with clear separation of concerns:</p>
+                    <div class="code-block">
+                        <pre><code>deeptrace/
+├── cli.js                    <span class="code-comment"># Command-line interface entry point</span>
+├── questioner.js             <span class="code-comment"># Deterministic question tree generation</span>
+├── refiner.js                <span class="code-comment"># Question refinement and optimization</span>
+├── inspector.js              <span class="code-comment"># Web page inspection and extraction</span>
+├── storage.js                <span class="code-comment"># Structured data storage and retrieval</span>
+├── synthesizer.js            <span class="code-comment"># Research synthesis and output generation</span>
+├── outputs/                  <span class="code-comment"># Generated research files</span>
+├── package.json              <span class="code-comment"># Dependencies and project configuration</span>
+└── README.md                 <span class="code-comment"># Project overview and quick start</span></code></pre>
+                    </div>
+                    <p>Each module has a single responsibility and can be examined, tested, or modified independently. The architecture supports deterministic behavior through predictable module interactions.</p>
+                </div>
+            </section>
+
+            <!-- Limits of v1 -->
+            <section id="limits" class="doc-section section-fade">
+                <h2 class="section-title">Limits of v1</h2>
+                <div class="section-content">
+                    <p>Version 1 has intentional design boundaries:</p>
+                    <ul>
+                        <li><strong>No AI reasoning:</strong> All decisions are rule-based without neural network inference.</li>
+                        <li><strong>No natural language summaries:</strong> Outputs are structured data, not narrative text.</li>
+                        <li><strong>Deterministic only:</strong> Probabilistic or generative approaches are excluded.</li>
+                        <li><strong>Foundational design:</strong> The architecture prioritizes reliability over complexity.</li>
+                    </ul>
+                    <p>These limits ensure consistent, verifiable operation at the expense of flexibility and conversational interaction. Version 1 serves as a stable baseline for deterministic web research.</p>
+                </div>
+            </section>
+
+            <!-- Future Direction -->
+            <section id="future" class="doc-section section-fade">
+                <h2 class="section-title">Future Direction</h2>
+                <div class="section-content">
+                    <p>While v1 establishes deterministic operation, future versions may explore:</p>
+                    <ul>
+                        <li><strong>v2 with AI-assisted synthesis:</strong> Optional integration of language models for summary generation while maintaining deterministic core processes.</li>
+                        <li><strong>Enhanced research patterns:</strong> Additional deterministic algorithms for different research methodologies.</li>
+                        <li><strong>Extended output formats:</strong> Support for different data structures and export options.</li>
+                    </ul>
+                    <p>Version 1 will remain available as a stable, deterministic baseline. Any future development will maintain transparency and reproducibility as core principles, with clear documentation of any probabilistic components.</p>
+                </div>
+            </section>
+
+            <!-- Safety & Ethics -->
+            <section id="safety" class="doc-section section-fade">
+                <h2 class="section-title">Safety & Ethics</h2>
+                <div class="section-content">
+                    <p>DeepTrace is a tool that requires responsible usage:</p>
+                    <ul>
+                        <li><strong>User responsibility:</strong> Researchers are responsible for compliance with all applicable laws and regulations.</li>
+                        <li><strong>Respect website terms:</strong> The engine should only be used in accordance with the terms of service of visited websites.</li>
+                        <li><strong>No automated abuse:</strong> The tool includes rate limiting and respectful crawling patterns, but users must ensure their research does not disrupt web services.</li>
+                        <li><strong>Ethical research:</strong> DeepTrace should be used for legitimate research purposes with respect for privacy and intellectual property.</li>
+                    </ul>
+                    <p>The open-source nature of the project allows community review and contributes to transparent, accountable tool development.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">DeepTrace</div>
+                    <p>Deterministic Web Research Engine for systematic, verifiable exploration.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a>
+                        <a href="https://instagram.com/ximanta.xyz_" target="_blank">Instagram</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Resources</h3>
+                    <div class="footer-links">
+                        <a href="documentation.html">Documentation</a>
+                        <a href="#">Examples</a>
+                        <a href="#">API Reference</a>
+                        <a href="#">Changelog</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Contact</h3>
+                    <div class="footer-links">
+                        <a href="mailto:ximanta.official@gmail.com">ximanta.official@gmail.com</a>
+                        <a href="#">Founder: Himanta Bhuyan</a>
+                        <a href="#">Report an Issue</a>
+                        <a href="#">Feature Request</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© <span id="currentYear"></span> DeepTrace. All rights reserved.</p>
+                <p>Founded by Himanta Bhuyan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileMenuBtn.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
+        
+        // Update copyright year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Section fade-in on scroll
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        });
+        
+        document.querySelectorAll('.section-fade').forEach(section => {
+            sectionObserver.observe(section);
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    mobileNav.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.pageYOffset > 0) {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

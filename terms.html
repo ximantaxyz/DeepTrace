@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — DeepTrace</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f14;
+            --bg-secondary: #141a24;
+            --bg-card: #1a2230;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #22d3ee;
+            --accent-hover: #06b6d4;
+            --border: #2d3748;
+            --gradient: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(11, 15, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Page Intro */
+        .page-intro {
+            padding: 10rem 0 4rem;
+            position: relative;
+        }
+        
+        .page-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            line-height: 1.7;
+        }
+        
+        /* Content */
+        .content {
+            padding: 3rem 0 6rem;
+        }
+        
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .terms-section {
+            margin-bottom: 3.5rem;
+        }
+        
+        .terms-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .section-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        
+        .section-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        /* Lists */
+        .section-content ul, .section-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .section-content li {
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+        }
+        
+        .section-content li:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Notice Box */
+        .notice-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .notice-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        /* Contact Info */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+        
+        .contact-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .contact-item p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .terms-section {
+                margin-bottom: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .notice-box {
+                padding: 1.5rem;
+            }
+            
+            .contact-item {
+                padding: 1.25rem;
+            }
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .mobile-nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .section-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .section-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">DeepTrace</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="faqs.html">FAQs</a></li>
+                <li><a href="agreement.html">Agreement</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </nav>
+    </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documentation.html">Documentation</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="agreement.html">Agreement</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+    </ul>
+</div>
+
+    <!-- Page Intro -->
+    <section class="page-intro">
+        <div class="container">
+            <h1 class="page-title fade-in">Terms of Service</h1>
+            <p class="page-subtitle fade-in">
+                These terms govern your use of the DeepTrace website and services. By accessing our website,
+                you agree to be bound by these terms and our Privacy Policy.
+            </p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <main class="content">
+        <div class="container content-container">
+            <!-- Introduction -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Introduction</h2>
+                <div class="section-content">
+                    <p>DeepTrace is a deterministic web research engine designed for systematic, reproducible exploration of web content. These Terms of Service outline the conditions for accessing and using our website, documentation, and related services.</p>
+                    <p>By accessing the DeepTrace website, you acknowledge that you have read, understood, and agree to be bound by these terms. If you do not agree with any part of these terms, you should not use our website or services. These terms may be updated periodically, and continued use constitutes acceptance of any changes.</p>
+                </div>
+            </section>
+
+            <!-- Use of Services -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Use of Services</h2>
+                <div class="section-content">
+                    <p>The DeepTrace website and services are intended for research, educational, and informational purposes. You agree to use our services responsibly and in accordance with all applicable laws and regulations.</p>
+                    <p>Prohibited activities include:</p>
+                    <ul>
+                        <li>Using our services for illegal purposes or in violation of any laws</li>
+                        <li>Attempting to disrupt, damage, or interfere with our services or infrastructure</li>
+                        <li>Using automated systems to extract content without permission</li>
+                        <li>Submitting false or misleading information through our contact forms</li>
+                        <li>Engaging in harassment, abuse, or harmful behavior toward others</li>
+                    </ul>
+                    <p>We reserve the right to investigate and take appropriate action against any violations of these terms.</p>
+                </div>
+            </section>
+
+            <!-- Intellectual Property -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Intellectual Property</h2>
+                <div class="section-content">
+                    <p>All content, branding, logos, documentation, and research tools associated with DeepTrace are the property of DeepTrace and its founder, Himanta Bhuyan, unless otherwise stated. This includes but is not limited to text, graphics, code, documentation, and design elements.</p>
+                    <p>You may not:</p>
+                    <ul>
+                        <li>Reproduce, distribute, or create derivative works without explicit permission</li>
+                        <li>Use DeepTrace branding or logos for commercial purposes without authorization</li>
+                        <li>Claim ownership or authorship of DeepTrace intellectual property</li>
+                        <li>Remove or alter copyright notices or proprietary markings</li>
+                    </ul>
+                    <p>The DeepTrace research engine is open-source and available under its respective license on GitHub. Use of the source code is governed by that license agreement.</p>
+                </div>
+            </section>
+
+            <!-- User Responsibilities -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">User Responsibilities</h2>
+                <div class="section-content">
+                    <p>When using DeepTrace services, you are responsible for:</p>
+                    <ol>
+                        <li><strong>Accuracy of information:</strong> Providing truthful and accurate information when using contact forms or communication channels.</li>
+                        <li><strong>Lawful usage:</strong> Ensuring your use of our services complies with all applicable laws and regulations.</li>
+                        <li><strong>Respectful interaction:</strong> Maintaining professional and respectful communication in all interactions.</li>
+                        <li><strong>Security:</strong> Protecting your own systems and data when using our services.</li>
+                        <li><strong>Compliance:</strong> Adhering to these terms and any additional guidelines we provide.</li>
+                    </ol>
+                    
+                    <div class="notice-box">
+                        <h3>Research Responsibility</h3>
+                        <p>When using the DeepTrace research engine for web exploration, you are responsible for respecting website terms of service, copyright laws, and ethical research practices. DeepTrace provides tools but does not control or endorse specific research activities.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Limitation of Liability -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Limitation of Liability</h2>
+                <div class="section-content">
+                    <p>DeepTrace provides its website and services on an "as-is" basis. We make no representations or warranties of any kind, express or implied, regarding the accuracy, completeness, reliability, or suitability of our services.</p>
+                    <p>To the fullest extent permitted by law, DeepTrace and its founder shall not be liable for:</p>
+                    <ul>
+                        <li>Any direct, indirect, incidental, or consequential damages resulting from your use of our services</li>
+                        <li>Loss or corruption of data resulting from use of our website or tools</li>
+                        <li>Interpretation or application of research findings generated using our tools</li>
+                        <li>Third-party actions or content accessed through our services</li>
+                        <li>Service interruptions, delays, or technical issues beyond our control</li>
+                    </ul>
+                    <p>This limitation of liability applies regardless of the legal theory or basis for the claim.</p>
+                </div>
+            </section>
+
+            <!-- Service Availability -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Service Availability</h2>
+                <div class="section-content">
+                    <p>We strive to maintain consistent availability of our website and services, but we do not guarantee uninterrupted access. Services may be temporarily unavailable for maintenance, updates, or technical reasons without prior notice.</p>
+                    <p>DeepTrace reserves the right to:</p>
+                    <ul>
+                        <li>Modify, suspend, or discontinue any aspect of our services at any time</li>
+                        <li>Change features, functionality, or interfaces as development progresses</li>
+                        <li>Prioritize certain features or services over others based on resource availability</li>
+                    </ul>
+                    <p>We will make reasonable efforts to communicate significant changes to our services, but are not obligated to provide advance notice for all modifications.</p>
+                </div>
+            </section>
+
+            <!-- Termination -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Termination</h2>
+                <div class="section-content">
+                    <p>We reserve the right to suspend or terminate access to our services for users who violate these terms or engage in harmful activities. Grounds for termination may include but are not limited to:</p>
+                    <ul>
+                        <li>Violation of these Terms of Service</li>
+                        <li>Abuse of our services or infrastructure</li>
+                        <li>Illegal or fraudulent activity</li>
+                        <li>Harassment or harmful behavior toward others</li>
+                        <li>Attempts to compromise the security or integrity of our services</li>
+                    </ul>
+                    <p>Termination may occur without prior notice in cases of severe violations. We may also restrict access to specific features or services as necessary to protect our systems and other users.</p>
+                </div>
+            </section>
+
+            <!-- Governing Law -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Governing Law</h2>
+                <div class="section-content">
+                    <p>These Terms of Service shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law principles.</p>
+                    <p>Any disputes arising from these terms or your use of DeepTrace services shall be subject to the exclusive jurisdiction of the courts located in India. By using our services, you consent to this jurisdiction and venue.</p>
+                    <p>If any provision of these terms is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect. Our failure to enforce any right or provision shall not be considered a waiver of those rights.</p>
+                </div>
+            </section>
+
+            <!-- Contact Information -->
+            <section class="terms-section section-fade">
+                <h2 class="section-title">Contact Information</h2>
+                <div class="section-content">
+                    <p>For questions about these terms or to report violations, please contact:</p>
+                    
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <h3>Email</h3>
+                            <p>ximanta.official@gmail.com</p>
+                        </div>
+                        <div class="contact-item">
+                            <h3>GitHub</h3>
+                            <p>github.com/ximantaxyz</p>
+                        </div>
+                        <div class="contact-item">
+                            <h3>Instagram</h3>
+                            <p>@ximanta.xyz_</p>
+                        </div>
+                    </div>
+                    
+                    <p>We aim to respond to all legitimate inquiries within a reasonable timeframe. For urgent matters, please indicate the urgency in your communication.</p>
+                    
+                    <div class="notice-box">
+                        <h3>Effective Date</h3>
+                        <p>These Terms of Service are effective as of <span id="currentDate"></span>. Your continued use of DeepTrace services constitutes acceptance of any updates to these terms.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">DeepTrace</div>
+                    <p>Deterministic Web Research Engine for systematic, verifiable exploration.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a>
+                        <a href="https://instagram.com/ximanta.xyz_" target="_blank">Instagram</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Resources</h3>
+                    <div class="footer-links">
+                        <a href="documentation.html">Documentation</a>
+                        <a href="faqs.html">FAQs</a>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Contact</h3>
+                    <div class="footer-links">
+                        <a href="mailto:ximanta.official@gmail.com">ximanta.official@gmail.com</a>
+                        <a href="#">Founder: Himanta Bhuyan</a>
+                        <a href="contact.html">Contact Form</a>
+                        <a href="#">Feature Request</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© <span id="currentYear"></span> DeepTrace. All rights reserved.</p>
+                <p>Founded by Himanta Bhuyan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileMenuBtn.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
+        
+        // Update copyright year and date
+        const currentYear = new Date().getFullYear();
+        document.getElementById('currentYear').textContent = currentYear;
+        
+        const currentDate = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = currentDate.toLocaleDateString('en-US', options);
+        
+        // Section fade-in on scroll
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        });
+        
+        document.querySelectorAll('.section-fade').forEach(section => {
+            sectionObserver.observe(section);
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.pageYOffset > 0) {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+        
+        // Initialize fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

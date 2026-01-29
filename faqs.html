@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs — DeepTrace</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f14;
+            --bg-secondary: #141a24;
+            --bg-card: #1a2230;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #22d3ee;
+            --accent-hover: #06b6d4;
+            --border: #2d3748;
+            --gradient: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(11, 15, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Page Intro */
+        .page-intro {
+            padding: 10rem 0 4rem;
+            position: relative;
+        }
+        
+        .page-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            line-height: 1.7;
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            padding: 3rem 0 6rem;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+        
+        .faq-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .faq-item:hover {
+            border-color: var(--border);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+        
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-question::after {
+            content: '−';
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 1000px;
+        }
+        
+        .faq-answer p {
+            margin-bottom: 1rem;
+        }
+        
+        .faq-answer p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1rem;
+            }
+            
+            .faq-question {
+                padding: 1.25rem;
+                font-size: 1rem;
+            }
+            
+            .faq-answer {
+                padding: 0 1.25rem;
+            }
+            
+            .faq-item.active .faq-answer {
+                padding: 0 1.25rem 1.25rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .faq-question {
+                padding: 1rem;
+            }
+            
+            .faq-answer {
+                padding: 0 1rem;
+            }
+            
+            .faq-item.active .faq-answer {
+                padding: 0 1rem 1rem;
+            }
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-bottom: 1px solid var(--border);
+            z-index: 999;
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .mobile-nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        
+        .mobile-nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .mobile-nav-links a:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">DeepTrace</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="faqs.html">FAQs</a></li>
+                <li><a href="agreement.html">Agreement</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </nav>
+    </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+    <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="documentation.html">Documentation</a></li>
+        <li><a href="faqs.html">FAQs</a></li>
+        <li><a href="agreement.html">Agreement</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+        <li><a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a></li>
+    </ul>
+</div>
+
+    <!-- Page Intro -->
+    <section class="page-intro">
+        <div class="container">
+            <h1 class="page-title">FAQs — DeepTrace</h1>
+            <p class="page-subtitle">
+                These questions address what DeepTrace is, what it is not, and how v1 should be understood.
+                The answers reflect the current implementation and design philosophy.
+            </p>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="faq-container">
+                <!-- FAQ 1 -->
+                <div class="faq-item">
+                    <button class="faq-question">What exactly is DeepTrace?</button>
+                    <div class="faq-answer">
+                        <p>DeepTrace is a deterministic web research engine designed for systematic, reproducible exploration of web content. It operates without AI or machine learning in version 1, using rule-based procedures to generate structured question trees, inspect web pages methodically, and produce verifiable research outputs.</p>
+                        <p>The engine prioritizes transparency and control over convenience, delivering consistent results that can be reproduced with identical inputs. It is designed for researchers who require verifiable findings rather than conversational interaction.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="faq-item">
+                    <button class="faq-question">Is DeepTrace an AI chatbot?</button>
+                    <div class="faq-answer">
+                        <p>No. DeepTrace is not a chatbot and does not engage in conversational interaction. It follows deterministic research workflows with structured inputs and outputs. The interface is command-line based, not conversational.</p>
+                        <p>Version 1 contains no neural networks, language models, or machine learning algorithms. All operations are rule-based and predictable.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="faq-item">
+                    <button class="faq-question">Does DeepTrace v1 use AI or LLMs?</button>
+                    <div class="faq-answer">
+                        <p>No. Version 1 intentionally excludes AI, LLMs, and machine learning components. The research engine operates entirely through deterministic algorithms and rule-based procedures.</p>
+                        <p>This design choice ensures consistent, reproducible results and eliminates the unpredictability associated with AI systems. Every operation in v1 is transparent and can be traced from input to output.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="faq-item">
+                    <button class="faq-question">What problem does DeepTrace solve?</button>
+                    <div class="faq-answer">
+                        <p>DeepTrace addresses the inconsistency and opacity of contemporary AI research tools. Traditional systems often produce non-deterministic results, refuse to inspect certain sources, and lack traceable research processes.</p>
+                        <p>The engine provides systematic web research with guaranteed reproducibility, eliminating hallucinations, source refusal, and black-box decision-making. It enables researchers to verify every step of the research process.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="faq-item">
+                    <button class="faq-question">Who should use DeepTrace?</button>
+                    <div class="faq-answer">
+                        <p>DeepTrace is designed for researchers, analysts, and investigators who require systematic, verifiable web research. This includes academic researchers, business analysts, journalists, and independent investigators.</p>
+                        <p>The tool is particularly suitable for users who need to document their research methodology, verify sources, and produce reproducible findings. It is not designed for casual browsing or conversational information seeking.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="faq-item">
+                    <button class="faq-question">How is DeepTrace different from search engines?</button>
+                    <div class="faq-answer">
+                        <p>Search engines index and rank links for information retrieval. DeepTrace performs active research by visiting web pages, analyzing content, and synthesizing findings according to structured research questions.</p>
+                        <p>While search engines provide access to information, DeepTrace conducts systematic investigation with documented methodology and verifiable outputs. The engine inspects web content rather than indexing it.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 7 -->
+                <div class="faq-item">
+                    <button class="faq-question">Is DeepTrace suitable for academic research?</button>
+                    <div class="faq-answer">
+                        <p>Yes, particularly for research methodologies requiring systematic literature review, source verification, and reproducible processes. The deterministic nature and complete documentation make it suitable for academic work where methodology transparency is essential.</p>
+                        <p>However, researchers should evaluate whether the rule-based v1 capabilities match their specific research needs. The engine provides structured data outputs rather than narrative summaries.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 8 -->
+                <div class="faq-item">
+                    <button class="faq-question">What outputs does DeepTrace generate?</button>
+                    <div class="faq-answer">
+                        <p>DeepTrace produces structured JSON files containing extracted information with source attribution, a complete research log documenting all operations, synthesized research findings organized by question structure, and the generated question tree that guided the research.</p>
+                        <p>All outputs are designed for further analysis, integration with other tools, or manual examination. Version 1 does not generate narrative summaries or conversational responses.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 9 -->
+                <div class="faq-item">
+                    <button class="faq-question">Is DeepTrace free and open-source?</button>
+                    <div class="faq-answer">
+                        <p>Yes. DeepTrace is open-source software released under a permissive license. The complete source code is available on GitHub for examination, modification, and distribution.</p>
+                        <p>The project maintains transparency through open development, allowing community review and contribution. There are no usage fees or subscription requirements for version 1.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 10 -->
+                <div class="faq-item">
+                    <button class="faq-question">Will AI be added in future versions?</button>
+                    <div class="faq-answer">
+                        <p>Version 1 establishes a deterministic baseline without AI. Future versions may explore optional AI-assisted synthesis while maintaining deterministic core processes.</p>
+                        <p>Any AI integration would be clearly documented and separated from deterministic operations. Version 1 will remain available as a stable, deterministic baseline regardless of future development.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 11 -->
+                <div class="faq-item">
+                    <button class="faq-question">Is DeepTrace safe to use?</button>
+                    <div class="faq-answer">
+                        <p>DeepTrace is a research tool that requires responsible usage. The engine includes rate limiting and respectful crawling patterns, but users must ensure compliance with website terms of service and applicable laws.</p>
+                        <p>The tool should only be used for legitimate research purposes. Users are responsible for ethical research practices and respect for privacy and intellectual property.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 12 -->
+                <div class="faq-item">
+                    <button class="faq-question">Does DeepTrace collect user data?</button>
+                    <div class="faq-answer">
+                        <p>The DeepTrace research engine operates locally and does not transmit user data externally. All research activities remain on the user's machine unless explicitly shared.</p>
+                        <p>The website may collect standard web server logs for security and maintenance. Contact form submissions are handled through secure channels. Research data generated by users is not accessed by the DeepTrace team.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">DeepTrace</div>
+                    <p>Deterministic Web Research Engine for systematic, verifiable exploration.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/ximantaxyz/deeptrace" target="_blank">GitHub</a>
+                        <a href="https://instagram.com/ximanta.xyz_" target="_blank">Instagram</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Resources</h3>
+                    <div class="footer-links">
+                        <a href="documentation.html">Documentation</a>
+                        <a href="faqs.html">FAQs</a>
+                        <a href="privacy.html">Privacy</a>
+                        <a href="terms.html">Terms</a>
+                    </div>
+                </div>
+                <div>
+                    <h3>Contact</h3>
+                    <div class="footer-links">
+                        <a href="mailto:ximanta.official@gmail.com">ximanta.official@gmail.com</a>
+                        <a href="about.html">Founder: Himanta Bhuyan</a>
+                        <a href="contact.html">Contact Form</a>
+                        <a href="https://github.com/ximantaxyz/deeptrace/issues" target="_blank">Report Issues</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© <span id="currentYear"></span> DeepTrace. All rights reserved.</p>
+                <p>Founded by Himanta Bhuyan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileMenuBtn.textContent = mobileNav.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
+        
+        // Update copyright year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // FAQ toggle functionality
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current item
+                item.classList.toggle('active');
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.pageYOffset > 0) {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
