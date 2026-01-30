@@ -28,7 +28,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "node-fetch": "^3.3.2",
-    "cheerio": "^1.0.0-rc.12"
+  "node-fetch": "^3.3.2",
+  "cheerio": "^1.0.0-rc.12",
+  "jsdom": "^24.0.0"
   }
 }
