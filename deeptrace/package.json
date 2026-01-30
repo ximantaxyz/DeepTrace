@@ -1,11 +1,13 @@
 {
   "name": "deeptrace",
   "version": "1.0.0",
-  "description": "Deterministic CLI-based web research engine for structured, repeatable investigations",
+  "description": "Deterministic CLI-based web research engine",
   "type": "commonjs",
   "bin": {
-    "deeptrace": "./cli.js"
+    "deeptrace": "./cli.js",
+    "dre": "./cli.js"
   },
+  "main": "cli.js",
   "scripts": {
     "start": "node cli.js"
   },
@@ -13,27 +15,20 @@
     "type": "git",
     "url": "https://github.com/ximantaxyz/DeepTrace.git"
   },
-  "homepage": "https://deeptrace.ximanta.space",
-  "bugs": {
-    "url": "https://github.com/ximantaxyz/DeepTrace/issues"
-  },
   "keywords": [
     "research",
-    "cli",
-    "web-scraping",
-    "automation",
-    "deterministic",
-    "analysis",
     "crawler",
-    "deeptrace"
+    "cli",
+    "automation",
+    "deterministic"
   ],
-  "author": "Himanta Bhuyan <ximanta.official@gmail.com>",
+  "author": "Himanta Bhuyan",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "node-fetch": "^3.3.2",
     "cheerio": "^1.0.0-rc.12"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }
