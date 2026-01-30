@@ -9,6 +9,7 @@
        alt="Buy Me A Coffee" 
        style="height: 60px; width: 217px;">
 </a>
+
 ---
 
 # Deterministic Research Engine (v1.0.0)
